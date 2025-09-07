@@ -71,3 +71,36 @@ Spark session available as 'spark'.
 
 scala> 
 ```
+### Before moving to next step, please make sure master node can ssh to worker node passwordless !
+(In Master Node)
+```
+ssh-keygen -t rsa
+ssh-copy-id worker_username1@worker_ip1
+```
+check the file wall, is port 7077 (Spark WebUI) is allowed to let Worker node connect to master node
+```
+sudo ufw allow 7077
+```
+## Config Master Node (In Master Node)
+Copy <B>spark-env.sh-template</B> to <B>spark-env.sh</B> in the folder <B>conf/</B>
+```
+cp spark-env.sh-template spark-env.sh
+```
+Edit this file Add this line 
+```
+export SPARK_MASTER_HOST=192.168.128.52
+```
+Copy <B>workers-template</B> to <B>workers</B> in the folder <B>conf/</B>
+```
+cp workers-template workers
+```
+Add all the worker node host name/ip and remove localhost
+```
+node1
+node2
+```
+## Starting the Spark Cluster
+```
+start-all.sh
+```
+Go to 192.168.128.52:8080 (Master node ip), see if can access the Spark WebUI and all worker node is connected
